@@ -1,6 +1,10 @@
 package projects.olkakusiak.rssreader;
 
 
+import android.text.Html;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,7 +19,7 @@ public class Note {
     private String description;
     private String url;
     private String imgURL;
-    private Date publishDate = new Date();
+    private Date publishDate;
 
     public Note() {
 
@@ -31,10 +35,6 @@ public class Note {
 
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getUrl() {
@@ -57,8 +57,12 @@ public class Note {
         return publishDate;
     }
 
-    public void setPublishDate(Date publishDate) {
-        this.publishDate = publishDate;
+    public void setPublishDate(String publishDate) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss Z");
+        try {
+            this.publishDate = dateFormat.parse(publishDate);
+        } catch (Exception ignored) {
+        }
     }
 
     public String getContent() {
@@ -67,24 +71,21 @@ public class Note {
 
     public void setContent(String content) {
         this.content = content;
-
-        if (content.length() >= 50) {
-            this.description = content.substring(0, 50);
+        String contentWithoutTags = stripHtml(content);
+        if (content.length() >= 150) {
+            this.description = contentWithoutTags.substring(0, 150);
         } else {
-            this.description = content;
+            this.description = contentWithoutTags;
         }
 
     }
 
-    // TODO: Remove it later
-//    public static ArrayList<Note> createFakeNoteList(int numNotes) {
-//        Date currentTime = Calendar.getInstance().getTime();
-//        ArrayList<Note> notes = new ArrayList<Note>();
-//
-//        for (int i = 1; i <= numNotes; i++) {
-//            notes.add(new Note("Some title", "Some description", "https://html.com/wp-content/uploads/flamingo.jpg", currentTime));
-//
-//        }
-//        return notes;
-//    }
+    private String stripHtml(String html) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY).toString();
+        } else {
+            return Html.fromHtml(html).toString();
+        }
+    }
+
 }

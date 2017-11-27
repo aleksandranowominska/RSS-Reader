@@ -17,7 +17,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -102,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
         String title = null;
         String link = null;
         String description = null;
+        String date = null;
+        String imgURL = null;
         boolean isItem = false;
         List<Note> items = new ArrayList<>();
 
@@ -132,6 +136,15 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+                if(name.equals("media:content")){
+                    for (int i = 0; i< xmlPullParser.getAttributeCount(); i++ ){
+                        if (Objects.equals(xmlPullParser.getAttributeName(i), "url")){
+                            imgURL = xmlPullParser.getAttributeValue(1).toString();
+                        }
+                    }
+
+                }
+
                 Log.d("MyXmlParser", "Parsing name ==> " + name);
                 String result = "";
                 if (xmlPullParser.next() == XmlPullParser.TEXT) {
@@ -145,14 +158,18 @@ public class MainActivity extends AppCompatActivity {
                     link = result;
                 } else if (name.equalsIgnoreCase("description")) {
                     description = result;
+                } else if (name.equals("pubDate")){
+                    date = result;
                 }
 
-                if (title != null && link != null && description != null) {
+                if (title != null && link != null && description != null && imgURL != null && date !=null) {
                     if (isItem) {
                         Note note = new Note();
                         note.setTitle(title);
                         note.setUrl(link);
                         note.setContent(description);
+                        note.setImgURL(imgURL);
+                        note.setPublishDate(date);
                         items.add(note);
                     } else {
 //                        mFeedTitle = title;
@@ -164,6 +181,8 @@ public class MainActivity extends AppCompatActivity {
                     link = null;
                     description = null;
                     isItem = false;
+                    imgURL = null;
+                    date = null;
                 }
             }
 

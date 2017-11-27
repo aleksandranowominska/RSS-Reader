@@ -59,10 +59,13 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         holder.noteNameTextView.setText(note.getTitle());
         holder.noteDescriptionTextView.setText(note.getDescription());
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String dateAsString = simpleDateFormat.format(note.getPublishDate());
-        holder.notePublishDate.setText(dateAsString);
-
+        if (note.getPublishDate() != null) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            String dateAsString = simpleDateFormat.format(note.getPublishDate());
+            holder.notePublishDate.setText(dateAsString);
+        } else {
+            holder.notePublishDate.setText("");
+        }
 
         if (note.getImgURL() != null && note.getImgURL().isEmpty()) {
             holder.noteMainImgImageView.setImageResource(R.drawable.placeholder);
