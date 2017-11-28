@@ -52,12 +52,12 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         ViewHolder viewHolder = new ViewHolder(noteView);
         return viewHolder;
     }
-
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Note note = listOfNotes.get(position);
         holder.noteNameTextView.setText(note.getTitle());
         holder.noteDescriptionTextView.setText(note.getDescription());
+
 
         if (note.getPublishDate() != null) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");

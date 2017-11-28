@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/note_details_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/note_title_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_toLeftOf="@id/note_publish_date"
+            android:text="Some title of the post"
+            android:textStyle="bold"
+            android:textSize="20sp"/>
+
+
+        <TextView
+            android:id="@+id/note_publish_date_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="15dp"
+            android:text="25.11.2017"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/note_content_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/note_title_details"
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:text="Some descriprion of the post some descriprion of the post some descriprion of the post some descriprion of the post some descriprion of the post some descriprion of the post some descriprion of the post some descriprion of the post some descriprion of the post some descriprion of the post some descriprion of the post some descriprion of the post "
+            android:textSize="15sp"
+            />
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

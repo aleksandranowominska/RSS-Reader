@@ -1,13 +1,15 @@
 package projects.olkakusiak.rssreader;
 
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.Xml;
+import android.view.View;
 import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -17,9 +19,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
+import static projects.olkakusiak.rssreader.NoteDetailsActivity.NOTE_CONTENT;
+import static projects.olkakusiak.rssreader.NoteDetailsActivity.NOTE_DATE;
+import static projects.olkakusiak.rssreader.NoteDetailsActivity.NOTE_TITLE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,9 +35,6 @@ public class MainActivity extends AppCompatActivity {
     NotesRecyclerViewAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     String fetchURL;
-
-
-    private List<Note> listOfNotes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,23 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         pullNotes();
+
+        recyclerView.addOnItemTouchListener(new RecyclerNoteClickListener(this, recyclerView, new RecyclerNoteClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Note note = arrayListOfNotes.get(position);
+                Intent intent = new Intent(MainActivity.this, NoteDetailsActivity.class);
+                intent.putExtra(NOTE_TITLE, note.getTitle());
+                intent.putExtra(NOTE_DATE, note.getPublishDate());
+                intent.putExtra(NOTE_CONTENT, note.getContent());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+// TODO: Set as red
+            }
+        }));
     }
 
     public void pullNotes() {
@@ -136,9 +155,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-                if(name.equals("media:content")){
-                    for (int i = 0; i< xmlPullParser.getAttributeCount(); i++ ){
-                        if (Objects.equals(xmlPullParser.getAttributeName(i), "url")){
+                if (name.equals("media:content")) {
+                    for (int i = 0; i < xmlPullParser.getAttributeCount(); i++) {
+                        if (Objects.equals(xmlPullParser.getAttributeName(i), "url")) {
                             imgURL = xmlPullParser.getAttributeValue(1).toString();
                         }
                     }
@@ -158,11 +177,11 @@ public class MainActivity extends AppCompatActivity {
                     link = result;
                 } else if (name.equalsIgnoreCase("description")) {
                     description = result;
-                } else if (name.equals("pubDate")){
+                } else if (name.equals("pubDate")) {
                     date = result;
                 }
 
-                if (title != null && link != null && description != null && imgURL != null && date !=null) {
+                if (title != null && link != null && description != null && imgURL != null && date != null) {
                     if (isItem) {
                         Note note = new Note();
                         note.setTitle(title);
@@ -171,10 +190,6 @@ public class MainActivity extends AppCompatActivity {
                         note.setImgURL(imgURL);
                         note.setPublishDate(date);
                         items.add(note);
-                    } else {
-//                        mFeedTitle = title;
-//                        mFeedLink = link;
-//                        mFeedDescription = description;
                     }
 
                     title = null;
