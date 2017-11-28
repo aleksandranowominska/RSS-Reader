@@ -18,6 +18,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -57,14 +58,16 @@ public class MainActivity extends AppCompatActivity {
                 Note note = arrayListOfNotes.get(position);
                 Intent intent = new Intent(MainActivity.this, NoteDetailsActivity.class);
                 intent.putExtra(NOTE_TITLE, note.getTitle());
-                intent.putExtra(NOTE_DATE, note.getPublishDate());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                String dateAsString = simpleDateFormat.format(note.getPublishDate());
+                intent.putExtra(NOTE_DATE, dateAsString);
                 intent.putExtra(NOTE_CONTENT, note.getContent());
                 startActivity(intent);
             }
 
             @Override
             public void onLongItemClick(View view, int position) {
-// TODO: Set as red
+// TODO: Set as read
             }
         }));
     }
